@@ -16,7 +16,7 @@ class _MyAppState extends State<MyApp> {
     Category(name: "Кулинария"),
     Category(name: "Развитие"),
     Category(name: "Работа"),
-    Category(name: "Спорт"),
+    Category(name: "Другое"),
   ];
 
   @override
@@ -36,33 +36,31 @@ class _MyAppState extends State<MyApp> {
           backgroundColor: Colors.orange[400],
         ),
         body: Container(
-          child: ListView.builder(
-            itemCount: category.length,
-            itemBuilder: (_, index) => Wrap(
-              children: [ Row(
-                // width: 200,
-                // height: 150,
-                // margin: EdgeInsets.all(30),
-                // color: Colors.orange[400],
-                children: [
-                  Container( child: Text(
-                    "${category[index].name}",
-                    style: TextStyle(
-                      fontSize: 26,
-                    ),
-                    ),
-                ),
-              ],
-                ),
-            ],
-            ),
+          child: GridView.count(
+            crossAxisCount: 2,
+            children: List.generate(
+                category.length,
+                (index) => Center(
+                      child: Container(
+                        height: 80,
+                        width: 150,
+                        decoration: BoxDecoration(
+                          color: Colors.orange[400],
+                        ),
+                        padding: const EdgeInsets.all(30),
+                        child: Text("${category[index].name}"),
+                      ),
+                    )),
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          child: Icon(Icons.add),
+          backgroundColor: Colors.orange[400],
+          onPressed: () {
+            print("Добавить");
+          },
+        ),
       ),
-      // floatingActionButton: FloatingActionButton(
-      //   child: Icon(Icons.add),
-      //   backgroundColor: Colors.orange[400],
-      // ),
     );
   }
 }
