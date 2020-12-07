@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
+
 class Category {
   String name;
-  String color;
+  Color color;
 
   Category({this.name, this.color});
 }

@@ -13,11 +13,16 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final List<Category> category = [
-    Category(name: "Спорт", color: "0xFFe0e0e0"),
-    Category(name: "Кулинария", color: "0xFFb3b3b3"),
-    Category(name: "Развитие", color: "0xFF808080"),
-    Category(name: "Работа", color: "0xFF4d4d4d"),
-    Category(name: "Другое", color: "0xFF262626"),
+    Category(name: "Спорт", color: Color(0xFFe0e0e0)),
+    Category(name: "Кулинария", color: Color(0xFFb3b3b3)),
+    Category(name: "Развитие", color: Color(0xFF808080)),
+    Category(name: "Работа", color: Color(0xFF4d4d4d)),
+    Category(name: "Другое", color: Color(0xFF262626)),
+    Category(name: "Спорт", color: Color(0xFFe0e0e0)),
+    Category(name: "Кулинария", color: Color(0xFFb3b3b3)),
+    Category(name: "Развитие", color: Color(0xFF808080)),
+    Category(name: "Работа", color: Color(0xFF4d4d4d)),
+    Category(name: "Другое", color: Color(0xFF262626)),
   ];
 
   @override
@@ -30,37 +35,48 @@ class _MyAppState extends State<MyApp> {
             "Timer",
             style: TextStyle(
               fontSize: 28.0,
-              color: Colors.white,
+              color: Colors.black87,
             ),
           ),
           centerTitle: true,
-          backgroundColor: Colors.orange[400],
+          backgroundColor: Colors.white,
+          elevation: 0,
         ),
         body: Container(
+          margin: EdgeInsets.symmetric(vertical: 4.0),
           child: GridView.count(
             crossAxisCount: 2,
             children: List.generate(
               category.length,
               (index) => Card(
-                color: Colors.orange[400],
+                color: category[index].color,
                 child: InkWell(
                   splashColor: Colors.red,
-                  onTap: () {},
+                  onTap: () {
+                    print('tap');
+                  },
+                  onDoubleTap: () {
+                    print('statistic');
+                  },
                   child: Container(
                     child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
                             IconButton(
                                 icon: Icon(Icons.cancel_outlined),
-                                onPressed: () {},
+                                onPressed: () {
+                                  print('delete');
+                                },
                             ),
                           ],
                         ),
-                        Align(
-                          alignment: Alignment(-1.0,.0),
-                          child: Text("${category[index].name}",
+                        Container(
+                          margin: EdgeInsets.only(left: 0, bottom: 0, top: 100),
+                          child: Text(
+                            category[index].name,
                           ),
                         ),
                       ],
