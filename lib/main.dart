@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:timer/classes/category_names.dart';
 
 void main() {
@@ -12,11 +13,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final List<Category> category = [
-    Category(name: "Спорт"),
-    Category(name: "Кулинария"),
-    Category(name: "Развитие"),
-    Category(name: "Работа"),
-    Category(name: "Другое"),
+    Category(name: "Спорт", color: "0xFFe0e0e0"),
+    Category(name: "Кулинария", color: "0xFFb3b3b3"),
+    Category(name: "Развитие", color: "0xFF808080"),
+    Category(name: "Работа", color: "0xFF4d4d4d"),
+    Category(name: "Другое", color: "0xFF262626"),
   ];
 
   @override
@@ -39,18 +40,35 @@ class _MyAppState extends State<MyApp> {
           child: GridView.count(
             crossAxisCount: 2,
             children: List.generate(
-                category.length,
-                (index) => Center(
-                      child: Container(
-                        height: 80,
-                        width: 150,
-                        decoration: BoxDecoration(
-                          color: Colors.orange[400],
+              category.length,
+              (index) => Card(
+                color: Colors.orange[400],
+                child: InkWell(
+                  splashColor: Colors.red,
+                  onTap: () {},
+                  child: Container(
+                    child: Column(
+                      children: <Widget>[
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                                icon: Icon(Icons.cancel_outlined),
+                                onPressed: () {},
+                            ),
+                          ],
                         ),
-                        padding: const EdgeInsets.all(30),
-                        child: Text("${category[index].name}"),
-                      ),
-                    )),
+                        Align(
+                          alignment: Alignment(-1.0,.0),
+                          child: Text("${category[index].name}",
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
         floatingActionButton: FloatingActionButton(
