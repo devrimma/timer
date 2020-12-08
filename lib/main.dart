@@ -25,6 +25,10 @@ class _MyAppState extends State<MyApp> {
     Category(name: "Другое", color: Color(0xFF262626)),
   ];
 
+  Future<Null> refreshCategories() async {
+    await Future.delayed(Duration(seconds: 2));
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -44,42 +48,45 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Container(
           margin: EdgeInsets.symmetric(vertical: 4.0),
-          child: GridView.count(
-            crossAxisCount: 2,
-            children: List.generate(
-              category.length,
-              (index) => Card(
-                color: category[index].color,
-                child: InkWell(
-                  splashColor: Colors.red,
-                  onTap: () {
-                    print('tap');
-                  },
-                  onDoubleTap: () {
-                    print('statistic');
-                  },
-                  child: Container(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                                icon: Icon(Icons.cancel_outlined),
-                                onPressed: () {
-                                  print('delete');
-                                },
-                            ),
-                          ],
-                        ),
-                        Container(
-                          margin: EdgeInsets.only(left: 0, bottom: 0, top: 100),
-                          child: Text(
-                            category[index].name,
+          child: RefreshIndicator(
+            onRefresh: refreshCategories,
+            child: GridView.count(
+              crossAxisCount: 2,
+              children: List.generate(
+                category.length,
+                (index) => Card(
+                  color: category[index].color,
+                  child: InkWell(
+                    splashColor: Colors.red,
+                    onTap: () {
+                      print('tap');
+                    },
+                    onDoubleTap: () {
+                      print('statistic');
+                    },
+                    child: Container(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              IconButton(
+                                  icon: Icon(Icons.cancel_outlined),
+                                  onPressed: () {
+                                    print('delete');
+                                  },
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
+                          Container(
+                            margin: EdgeInsets.only(left: 0, bottom: 0, top: 100),
+                            child: Text(
+                              category[index].name,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
