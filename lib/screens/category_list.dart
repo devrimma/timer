@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timer/classes/category_names.dart';
+import 'package:timer/screens/timer_list.dart';
 
 class CategoryList extends StatefulWidget {
   @override
@@ -29,7 +30,7 @@ class _CategoryListState extends State<CategoryList> {
           "TiriPuri",
           style: TextStyle(
             fontSize: 28.0,
-            color: Colors.black87,
+            color: Colors.orange[400],
           ),
         ),
         centerTitle: true,
@@ -47,7 +48,9 @@ class _CategoryListState extends State<CategoryList> {
               child: InkWell(
                 splashColor: Colors.red,
                 onTap: () {
-                  print('tap');
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => TimerList()),
+                  );
                 },
                 onDoubleTap: () {
                   print('statistic');

@@ -13,9 +13,9 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  Future<Null> refreshCategories() async {
-    await Future.delayed(Duration(seconds: 2));
-  }
+  // Future<Null> refreshCategories() async {
+  //   await Future.delayed(Duration(seconds: 2));
+  // } ДОРАБОТАТЬ
 
   @override
   Widget build(BuildContext context) {
