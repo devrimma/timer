@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:timer/models/category.dart';
-import 'package:timer/screens/add_category.dart';
+import 'package:timer/screens/popup/category.dart';
+import 'package:timer/screens/timer_list.dart';
 
 class CategoryList extends StatefulWidget {
   @override
@@ -38,14 +39,14 @@ class _CategoryListState extends State<CategoryList> {
             return GridView.count(
               crossAxisCount: 2,
               children: List.generate(
-                // Provider.of<CategoryData>(context).categoriesCount
                 box.values.length,
                 (index) => Card(
                   color: Color(0xFFe0e0e0),
                   child: InkWell(
-                    splashColor: Colors.red,
+                    splashColor: Colors.orange[400],
                     onTap: () {
-                      print('tap');
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (context) => TimerList(category: box.getAt(index),)));
                     },
                     onDoubleTap: () {
                       print('statistic');
@@ -88,8 +89,10 @@ class _CategoryListState extends State<CategoryList> {
         child: Icon(Icons.add),
         backgroundColor: Colors.orange[400],
         onPressed: () {
-          Navigator.of(context)
-              .push(MaterialPageRoute(builder: (context) => AddCategory()));
+          showDialog(
+            context: context,
+            builder: (BuildContext context) => CategoryPopup(),
+          );
         },
       ),
     );

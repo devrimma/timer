@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:timer/models/category.dart';
-import 'package:timer/screens/add_category.dart';
 import 'package:timer/screens/category_list.dart';
 
 void main() async {

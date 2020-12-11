@@ -1,32 +1,23 @@
-
 import 'package:flutter/material.dart';
 import 'package:timer/classes/timer_names.dart';
+import 'package:timer/models/category.dart';
 import 'package:timer/screens/popup_creating_timer.dart';
 
 class TimerList extends StatelessWidget {
+  TimerList({Key key, this.category}) : super(key: key);
+
+  final Category category;
 
   final List<TimerNames> timers = [
     TimerNames(name: "Таймер 1", time: "20:00"),
     TimerNames(name: "Таймер 2", time: "10:00"),
-    TimerNames(name: "Таймер 3", time: "25:00"),
-    TimerNames(name: "Таймер 4", time: "13:00"),
-    TimerNames(name: "Таймер 5", time: "5:00"),
-    TimerNames(name: "Таймер 6", time: "1:00"),
-    TimerNames(name: "Таймер 7", time: "22:00"),
-    TimerNames(name: "Таймер 1", time: "20:00"),
-    TimerNames(name: "Таймер 2", time: "10:00"),
-    TimerNames(name: "Таймер 3", time: "25:00"),
-    TimerNames(name: "Таймер 4", time: "13:00"),
-    TimerNames(name: "Таймер 5", time: "5:00"),
-    TimerNames(name: "Таймер 6", time: "1:00"),
-    TimerNames(name: "Таймер 7", time: "22:00"),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Категория"),
+        title: Text(category.name),
         centerTitle: true,
         backgroundColor: Colors.orange[400],
       ),
