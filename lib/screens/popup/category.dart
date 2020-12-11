@@ -1,27 +1,40 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:timer/models/category.dart';
 
-class PopupTimer extends StatelessWidget {
+class CategoryPopup extends StatefulWidget {
+  @override
+  _CategoryPopupState createState() => _CategoryPopupState();
+}
+
+class _CategoryPopupState extends State<CategoryPopup> {
+  String name;
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController myController1 = TextEditingController();
-    TextEditingController myController2 = TextEditingController();
-
     return AlertDialog(
-      title: const Text("Таймер"),
+      title: const Text("Новая категория"),
       content: Container(
         child: Wrap(
           children: [
-            TextField(
-              decoration: InputDecoration(
-                labelText: "Название таймера",
+            Form(
+              key: _formKey,
+              child: TextFormField(
+                autofocus: true,
+                initialValue: '',
+                decoration: const InputDecoration(
+                  labelText: 'Название категории',
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    name = value;
+                  });
+                },
+                validator: (val) {
+                  return val.trim().isEmpty ? 'Название не должно быть пустым' : null;
+                },
               ),
-              controller: myController1,
-            ),
-            TextField(
-              decoration: InputDecoration(
-                labelText: "Время таймера",
-              ),
-              controller: myController2,
             ),
           ],
         ),
@@ -30,46 +43,32 @@ class PopupTimer extends StatelessWidget {
         FlatButton(
             color: Colors.orange[400],
             textColor: Colors.white,
-            child: Text("Принять"),
+            child: Text("Отмена"),
             onPressed: () {
               Navigator.pop(context);
             }),
         FlatButton(
             color: Colors.orange[400],
             textColor: Colors.white,
-            child: Text("Отмена"),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
+            child: Text("Добавить"),
+            onPressed: _validateAndSave,
+        ),
       ],
-      // content: SizedBox(
-      //   child: Column(
-      //     children: <Widget>[
-      //       Row(
-      //         children: [
-      //           Text("Название таймера"),
-      //           Expanded(
-      //             flex: 1,
-      //             child: TextField(
-      //               controller: myController,
-      //             ),
-      //           ),
-      //         ],
-      //       ),
-      //       Row(
-      //         children: [
-      //           Text("Время таймера"),
-      //           Expanded(
-      //             flex: 1,
-      //             child: TextField(
-      //               controller: myController,
-      //             ),
-      //           ),
-      //         ],
-      //       ),
-      //     ],
-      //   ),
-      // )
     );
+  }
+
+  void _validateAndSave() {
+    final form = _formKey.currentState;
+    if (form.validate()) {
+      _onFormSubmit();
+    } else {
+      print('form is invalid');
+    }
+  }
+
+  void _onFormSubmit() {
+    Box<Category> contactsBox = Hive.box<Category>('box_for_category');
+    contactsBox.add(Category(name: name));
+    Navigator.of(context).pop();
   }
 }
