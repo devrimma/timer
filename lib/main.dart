@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
-
+import 'package:hive/hive.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+import 'package:timer/models/category.dart';
+import 'package:timer/screens/add_category.dart';
 import 'package:timer/screens/category_list.dart';
 
-void main() {
+void main() async {
+  await Hive.initFlutter();
+  Hive.registerAdapter(CategoryAdapter());
+  await Hive.openBox<Category>('box_for_category');
+
+  //for test
+  var box = await Hive.openBox('testBox');
+  print(box.get('theme', defaultValue: 'light'));
+
   runApp(MyApp());
 }
 
@@ -13,8 +24,11 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
 
-  Future<Null> refreshCategories() async {
-    await Future.delayed(Duration(seconds: 2));
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    Hive.close();
+    super.dispose();
   }
 
   @override
