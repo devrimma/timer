@@ -12,10 +12,23 @@ class CategoryList extends StatefulWidget {
 
 class _CategoryListState extends State<CategoryList> {
 
+  bool isSwitched = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: <Widget>[
+          Switch(
+            activeColor: Colors.orange[400],
+            value: isSwitched,
+            onChanged: (value) {
+              setState(() {
+                isSwitched = value;
+                print(isSwitched);
+              });
+            },)
+        ],
         title: Text(
           "TiriPuri",
           style: TextStyle(
@@ -46,7 +59,8 @@ class _CategoryListState extends State<CategoryList> {
                     splashColor: Colors.orange[400],
                     onTap: () {
                       Navigator.of(context)
-                          .push(MaterialPageRoute(builder: (context) => TimerList(category: box.getAt(index),)));
+                          .push(MaterialPageRoute(builder: (context) =>
+                          TimerList(category: box.getAt(index),)));
                     },
                     onDoubleTap: () {
                       print('statistic');
@@ -56,13 +70,38 @@ class _CategoryListState extends State<CategoryList> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              IconButton(
+                                icon: Icon(Icons.edit),
+                                onPressed: () {},
+                              ),
                               IconButton(
                                 icon: Icon(Icons.cancel_outlined),
                                 onPressed: () {
-                                  print('delete');
-                                  box.getAt(index).delete();
+                                  showDialog(
+                                      context: context,
+                                    builder: (BuildContext context) => AlertDialog(
+                                      title: Text("Удалить ${box.getAt(index).name}?"),
+                                      actions: <Widget>[
+                                        FlatButton(
+                                            color: Colors.orange[400],
+                                            textColor: Colors.white,
+                                            child: Text("Нет"),
+                                            onPressed: () {
+                                              Navigator.pop(context);
+                                            }),
+                                        FlatButton(
+                                            color: Colors.orange[400],
+                                            textColor: Colors.white,
+                                            child: Text("Да"),
+                                            onPressed: () {
+                                              box.getAt(index).delete();
+                                              Navigator.pop(context);
+                                            }),
+                                      ],
+                                    ),
+                                  );
                                 },
                               ),
                             ],
