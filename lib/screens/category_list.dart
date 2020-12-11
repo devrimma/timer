@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:timer/classes/category_names.dart';
+import 'package:timer/screens/timer_list.dart';
 
 class CategoryList extends StatefulWidget {
   @override
@@ -9,16 +10,14 @@ class CategoryList extends StatefulWidget {
 class _CategoryListState extends State<CategoryList> {
 
   final List<Category> category = [
-    Category(name: "Спорт", color: Color(0xFFe0e0e0)),
-    Category(name: "Кулинария", color: Color(0xFFb3b3b3)),
-    Category(name: "Развитие", color: Color(0xFF808080)),
-    Category(name: "Работа", color: Color(0xFF4d4d4d)),
-    Category(name: "Другое", color: Color(0xFF262626)),
-    Category(name: "Спорт", color: Color(0xFFe0e0e0)),
-    Category(name: "Кулинария", color: Color(0xFFb3b3b3)),
-    Category(name: "Развитие", color: Color(0xFF808080)),
-    Category(name: "Работа", color: Color(0xFF4d4d4d)),
-    Category(name: "Другое", color: Color(0xFF262626)),
+    Category(name: "Спорт", color: Color(0xFFFFE0B2)),
+    Category(name: "Кулинария", color: Color(0xFFFFCC80)),
+    Category(name: "Развитие", color: Color(0xFFFFB74D)),
+    Category(name: "Работа", color: Color(0xFFFFA726)),
+    Category(name: "Спорт", color: Color(0xFFFFE0B2)),
+    Category(name: "Кулинария", color: Color(0xFFFFCC80)),
+    Category(name: "Развитие", color: Color(0xFFFFB74D)),
+    Category(name: "Работа", color: Color(0xFFFFA726)),
   ];
 
   @override
@@ -29,7 +28,7 @@ class _CategoryListState extends State<CategoryList> {
           "TiriPuri",
           style: TextStyle(
             fontSize: 28.0,
-            color: Colors.black87,
+            color: Colors.orange[400],
           ),
         ),
         centerTitle: true,
@@ -47,7 +46,9 @@ class _CategoryListState extends State<CategoryList> {
               child: InkWell(
                 splashColor: Colors.red,
                 onTap: () {
-                  print('tap');
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => TimerList()),
+                  );
                 },
                 onDoubleTap: () {
                   print('statistic');
