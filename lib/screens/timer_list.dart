@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:timer/classes/timer_names.dart';
+import 'package:hive/hive.dart';
 import 'package:timer/models/category.dart';
+import 'package:timer/models/timer.dart';
 import 'package:timer/screens/popup_creating_timer.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 
 class TimerList extends StatelessWidget {
   TimerList({Key key, this.category}) : super(key: key);
 
   final Category category;
 
-  final List<TimerNames> timers = [
-    TimerNames(name: "Таймер 1", time: "20:00"),
-    TimerNames(name: "Таймер 2", time: "10:00"),
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +46,13 @@ class TimerList extends StatelessWidget {
             ),
             Expanded(
               flex: 1,
-              child: ListView.builder(
-                  physics: BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemCount: timers.length,
-                  itemBuilder: (_, index) {
+              child: ValueListenableBuilder(
+                  valueListenable: Hive.box<Timer>('box_for_timer').listenable(),
+                  builder: (context, Box<Timer> box, _) {
+                    if (box.values.isEmpty)
+                      return Center(
+                        child: Text("нет таймеров"),
+                      );
                     return Card(
                       elevation: 10.0,
                       child: Row(
@@ -60,7 +60,7 @@ class TimerList extends StatelessWidget {
                           Expanded(
                             flex: 10,
                             child: ListTile(
-                              title: Text(timers[index].name),
+                              title: Text(box.name),
                               subtitle: Row(
                                 children: [
                                   Padding(
@@ -70,7 +70,7 @@ class TimerList extends StatelessWidget {
                                       size: 20.0,
                                     ),
                                   ),
-                                  Text(timers[index].time),
+                                  // Text(box.),
                                 ],
                               ),
                               onTap: () {},

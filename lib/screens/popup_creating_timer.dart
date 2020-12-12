@@ -1,29 +1,59 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:timer/models/timer.dart';
 
-class PopupTimer extends StatelessWidget {
+class PopupTimer extends StatefulWidget {
+  @override
+  _PopupTimerState createState() => _PopupTimerState();
+}
+
+class _PopupTimerState extends State<PopupTimer> {
+
+  String name;
+  String time;
+  final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController myController1 = TextEditingController();
-    TextEditingController myController2 = TextEditingController();
-
     return AlertDialog(
       title: const Text("Таймер"),
       content: Container(
-        child: Wrap(
-          children: [
-            TextField(
-              decoration: InputDecoration(
-                labelText: "Название таймера",
+        child: Form(
+          key: _formKey,
+          child: Wrap(
+            children: [
+              TextFormField(
+                autofocus: true,
+                initialValue: '',
+                decoration: InputDecoration(
+                  labelText: "Название таймера",
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    name = value;
+                  });
+                },
+                validator: (val) {
+                  return val.trim().isEmpty ? 'Название не должно быть пустым' : null;
+                },
               ),
-              controller: myController1,
-            ),
-            TextField(
-              decoration: InputDecoration(
-                labelText: "Время таймера",
+              TextFormField(
+                autofocus: true,
+                initialValue: '',
+                decoration: InputDecoration(
+                  labelText: "Время таймера",
+                ),
+                onChanged: (value) {
+                  setState(() {
+                    time = value;
+                  });
+                },
+                validator: (val) {
+                  return val.trim().isEmpty ? 'Время не должно быть пустым' : null;
+                },
               ),
-              controller: myController2,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       actions: <Widget>[
@@ -31,9 +61,8 @@ class PopupTimer extends StatelessWidget {
             color: Colors.orange[400],
             textColor: Colors.white,
             child: Text("Принять"),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
+          onPressed: _validateAndSave,
+        ),
         FlatButton(
             color: Colors.orange[400],
             textColor: Colors.white,
@@ -42,34 +71,21 @@ class PopupTimer extends StatelessWidget {
               Navigator.pop(context);
             }),
       ],
-      // content: SizedBox(
-      //   child: Column(
-      //     children: <Widget>[
-      //       Row(
-      //         children: [
-      //           Text("Название таймера"),
-      //           Expanded(
-      //             flex: 1,
-      //             child: TextField(
-      //               controller: myController,
-      //             ),
-      //           ),
-      //         ],
-      //       ),
-      //       Row(
-      //         children: [
-      //           Text("Время таймера"),
-      //           Expanded(
-      //             flex: 1,
-      //             child: TextField(
-      //               controller: myController,
-      //             ),
-      //           ),
-      //         ],
-      //       ),
-      //     ],
-      //   ),
-      // )
     );
+  }
+
+  void _validateAndSave() {
+    final form = _formKey.currentState;
+    if (form.validate()) {
+      _onFormSubmit();
+    } else {
+      print('form is invalid');
+    }
+  }
+
+  void _onFormSubmit() {
+    Box<Timer> contactsBox = Hive.box<Timer>('box_for_timer');
+    contactsBox.add(Timer(name: name, time: time));
+    Navigator.of(context).pop();
   }
 }
