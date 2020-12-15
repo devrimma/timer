@@ -3,6 +3,8 @@ import 'package:hive/hive.dart';
 import 'package:timer/models/category.dart';
 import 'package:timer/models/timer.dart';
 
+import 'package:flutter/cupertino.dart';
+
 class PopupTimer extends StatefulWidget {
   PopupTimer({Key key, this.category}) : super(key: key);
 
@@ -44,7 +46,7 @@ class _PopupTimerState extends State<PopupTimer> {
               ),
               TextFormField(
                 autofocus: true,
-                initialValue: '',
+                initialValue: '00:00',
                 decoration: InputDecoration(
                   labelText: "Время таймера",
                 ),
