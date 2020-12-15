@@ -56,6 +56,7 @@ class _CategoryListState extends State<CategoryList> {
                 (index) => Card(
                   color: Color(0xFFe0e0e0),
                   child: InkWell(
+                    highlightColor: Colors.orange[200],
                     splashColor: Colors.orange[400],
                     onTap: () {
                       Navigator.of(context)
@@ -64,6 +65,21 @@ class _CategoryListState extends State<CategoryList> {
                     },
                     onDoubleTap: () {
                       print('statistic');
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) => AlertDialog(
+                          title: Center(child: Text(box.getAt(index).name)),
+                          actions: <Widget>[
+                            FlatButton(
+                                color: Colors.orange[400],
+                                textColor: Colors.white,
+                                child: Text("Закрыть"),
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                }),
+                          ],
+                        ),
+                      );
                     },
                     child: Container(
                       child: Column(
@@ -110,7 +126,6 @@ class _CategoryListState extends State<CategoryList> {
                             margin:
                                 EdgeInsets.only(left: 0, bottom: 0, top: 100),
                             child: Text(
-                              // category[index].name,
                               box.getAt(index).name,
                             ),
                           ),

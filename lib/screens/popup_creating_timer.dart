@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:timer/models/category.dart';
 import 'package:timer/models/timer.dart';
 
 class PopupTimer extends StatefulWidget {
+  PopupTimer({Key key, this.category}) : super(key: key);
+
+  final Category category;
+
   @override
   _PopupTimerState createState() => _PopupTimerState();
 }
@@ -10,13 +15,13 @@ class PopupTimer extends StatefulWidget {
 class _PopupTimerState extends State<PopupTimer> {
 
   String name;
-  String time;
+  int time;
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Таймер"),
+      title: Text("Таймер"),
       content: Container(
         child: Form(
           key: _formKey,
@@ -45,7 +50,7 @@ class _PopupTimerState extends State<PopupTimer> {
                 ),
                 onChanged: (value) {
                   setState(() {
-                    time = value;
+                    time = int.parse(value);
                   });
                 },
                 validator: (val) {
@@ -60,16 +65,16 @@ class _PopupTimerState extends State<PopupTimer> {
         FlatButton(
             color: Colors.orange[400],
             textColor: Colors.white,
-            child: Text("Принять"),
-          onPressed: _validateAndSave,
-        ),
-        FlatButton(
-            color: Colors.orange[400],
-            textColor: Colors.white,
             child: Text("Отмена"),
             onPressed: () {
               Navigator.pop(context);
             }),
+        FlatButton(
+            color: Colors.orange[400],
+            textColor: Colors.white,
+            child: Text("Принять"),
+          onPressed: _validateAndSave,
+        ),
       ],
     );
   }
@@ -85,7 +90,7 @@ class _PopupTimerState extends State<PopupTimer> {
 
   void _onFormSubmit() {
     Box<Timer> contactsBox = Hive.box<Timer>('box_for_timer');
-    contactsBox.add(Timer(name: name, time: time));
+    contactsBox.add(Timer(categoryId: widget.category.key, name: name, time: time));
     Navigator.of(context).pop();
   }
 }

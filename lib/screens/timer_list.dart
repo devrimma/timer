@@ -49,67 +49,97 @@ class TimerList extends StatelessWidget {
               child: ValueListenableBuilder(
                   valueListenable: Hive.box<Timer>('box_for_timer').listenable(),
                   builder: (context, Box<Timer> box, _) {
-                    if (box.values.isEmpty)
+                    final items = box.values.where((item) => item.categoryId == category.key).toList();
+
+                    if (items.isEmpty)
                       return Center(
                         child: Text("нет таймеров"),
                       );
-                    return Card(
-                      elevation: 10.0,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 10,
-                            child: ListTile(
-                              title: Text(box.name),
-                              subtitle: Row(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 5.0),
-                                    child: Icon(
-                                      Icons.access_time_rounded,
-                                      size: 20.0,
-                                    ),
+                    return ListView.builder(
+                      itemCount: items.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Card(
+                          elevation: 10.0,
+                          child: Row(
+                            children: [
+                              Expanded(
+                                flex: 10,
+                                child: ListTile(
+                                  title: Text(items[index].name),
+                                  subtitle: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.only(right: 5.0),
+                                        child: Icon(
+                                          Icons.access_time_rounded,
+                                          size: 20.0,
+                                        ),
+                                      ),
+                                      Text(items[index].time.toString()),
+                                    ],
                                   ),
-                                  // Text(box.),
-                                ],
+                                  onTap: () {},
+                                ),
                               ),
-                              onTap: () {},
-                            ),
+                              Expanded(
+                                flex: 1,
+                                child: IconButton(
+                                    icon: Icon(Icons.stop_circle_outlined),
+                                    onPressed: () {
+                                      print("Стоп");
+                                    }),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: IconButton(
+                                    icon: Icon(Icons.play_circle_fill),
+                                    onPressed: () {
+                                      print("Начать отсчет");
+                                    }),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: IconButton(
+                                    icon: Icon(Icons.edit),
+                                    onPressed: () {
+                                      print("Редактировать");
+                                    }),
+                              ),
+                              Expanded(
+                                flex: 2,
+                                child: IconButton(
+                                    icon: Icon(Icons.cancel_outlined),
+                                    onPressed: () {
+                                      print("Удалить");
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) => AlertDialog(
+                                          title: Text("Удалить ${items[index].name}?"),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                                color: Colors.orange[400],
+                                                textColor: Colors.white,
+                                                child: Text("Нет"),
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                }),
+                                            FlatButton(
+                                                color: Colors.orange[400],
+                                                textColor: Colors.white,
+                                                child: Text("Да"),
+                                                onPressed: () {
+                                                  items[index].delete();
+                                                  Navigator.pop(context);
+                                                }),
+                                          ],
+                                        ),
+                                      );
+                                    }),
+                              ),
+                            ],
                           ),
-                          Expanded(
-                            flex: 1,
-                            child: IconButton(
-                                icon: Icon(Icons.stop_circle_outlined),
-                                onPressed: () {
-                                  print("Стоп");
-                                }),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: IconButton(
-                                icon: Icon(Icons.play_circle_fill),
-                                onPressed: () {
-                                  print("Начать отсчет");
-                                }),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: IconButton(
-                                icon: Icon(Icons.edit),
-                                onPressed: () {
-                                  print("Редактировать");
-                                }),
-                          ),
-                          Expanded(
-                            flex: 2,
-                            child: IconButton(
-                                icon: Icon(Icons.cancel_outlined),
-                                onPressed: () {
-                                  print("Удалить");
-                                }),
-                          ),
-                        ],
-                      ),
+                        );
+                      },
                     );
                   }),
             ),
@@ -122,7 +152,7 @@ class TimerList extends StatelessWidget {
         onPressed: () {
           showDialog(
             context: context,
-            builder: (BuildContext context) => PopupTimer(),
+            builder: (BuildContext context) => PopupTimer(category: category,),
           );
         },
       ),

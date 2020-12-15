@@ -3,13 +3,16 @@ import 'package:hive/hive.dart';
 
 part 'timer.g.dart';
 
-@HiveType(typeId: 0)
+@HiveType(typeId: 1)
 class Timer extends HiveObject {
   @HiveField(0)
-  final String name;
+  final int categoryId;
 
   @HiveField(1)
-  final String time;
+  final String name;
 
-  Timer({@required this.name, this.time});
+  @HiveField(2)
+  final int time;
+
+  Timer({@required this.categoryId, @required this.name, this.time});
 }
