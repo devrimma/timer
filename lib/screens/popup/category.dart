@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:timer/constans.dart';
 import 'package:timer/models/category.dart';
+import 'package:timer/widgets/buttons.dart';
 
 class CategoryPopup extends StatefulWidget {
   @override
@@ -32,7 +34,9 @@ class _CategoryPopupState extends State<CategoryPopup> {
                   });
                 },
                 validator: (val) {
-                  return val.trim().isEmpty ? 'Название не должно быть пустым' : null;
+                  return val.trim().isEmpty
+                      ? 'Название не должно быть пустым'
+                      : null;
                 },
               ),
             ),
@@ -40,19 +44,10 @@ class _CategoryPopupState extends State<CategoryPopup> {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
-            color: Colors.orange[400],
-            textColor: Colors.white,
-            child: Text("Отмена"),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        FlatButton(
-            color: Colors.orange[400],
-            textColor: Colors.white,
-            child: Text("Добавить"),
-            onPressed: _validateAndSave,
-        ),
+        customFlB("Отмена", () {
+          Navigator.pop(context);
+        }),
+        customFlB("Добавить", _validateAndSave),
       ],
     );
   }
@@ -67,7 +62,7 @@ class _CategoryPopupState extends State<CategoryPopup> {
   }
 
   void _onFormSubmit() {
-    Box<Category> contactsBox = Hive.box<Category>('box_for_category');
+    Box<Category> contactsBox = Hive.box<Category>(boxC);
     contactsBox.add(Category(name: name));
     Navigator.of(context).pop();
   }

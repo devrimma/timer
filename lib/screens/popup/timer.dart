@@ -4,6 +4,7 @@ import 'package:timer/models/category.dart';
 import 'package:timer/models/timer.dart';
 
 import 'package:flutter/cupertino.dart';
+import 'package:timer/widgets/buttons.dart';
 
 class PopupTimer extends StatefulWidget {
   PopupTimer({Key key, this.category}) : super(key: key);
@@ -15,7 +16,6 @@ class PopupTimer extends StatefulWidget {
 }
 
 class _PopupTimerState extends State<PopupTimer> {
-
   String name;
   int time;
   final _formKey = GlobalKey<FormState>();
@@ -41,7 +41,9 @@ class _PopupTimerState extends State<PopupTimer> {
                   });
                 },
                 validator: (val) {
-                  return val.trim().isEmpty ? 'Название не должно быть пустым' : null;
+                  return val.trim().isEmpty
+                      ? 'Название не должно быть пустым'
+                      : null;
                 },
               ),
               TextFormField(
@@ -56,7 +58,9 @@ class _PopupTimerState extends State<PopupTimer> {
                   });
                 },
                 validator: (val) {
-                  return val.trim().isEmpty ? 'Время не должно быть пустым' : null;
+                  return val.trim().isEmpty
+                      ? 'Время не должно быть пустым'
+                      : null;
                 },
               ),
             ],
@@ -64,19 +68,10 @@ class _PopupTimerState extends State<PopupTimer> {
         ),
       ),
       actions: <Widget>[
-        FlatButton(
-            color: Colors.orange[400],
-            textColor: Colors.white,
-            child: Text("Отмена"),
-            onPressed: () {
-              Navigator.pop(context);
-            }),
-        FlatButton(
-            color: Colors.orange[400],
-            textColor: Colors.white,
-            child: Text("Принять"),
-          onPressed: _validateAndSave,
-        ),
+        customFlB("Отмена", () {
+          Navigator.pop(context);
+        }),
+        customFlB("Принять", _validateAndSave),
       ],
     );
   }
@@ -92,7 +87,8 @@ class _PopupTimerState extends State<PopupTimer> {
 
   void _onFormSubmit() {
     Box<Timer> contactsBox = Hive.box<Timer>('box_for_timer');
-    contactsBox.add(Timer(categoryId: widget.category.key, name: name, time: time));
+    contactsBox
+        .add(Timer(categoryId: widget.category.key, name: name, time: time));
     Navigator.of(context).pop();
   }
 }

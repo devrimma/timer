@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:timer/constans.dart';
 import 'package:timer/models/category.dart';
 import 'package:timer/models/timer.dart';
-import 'package:timer/screens/popup_creating_timer.dart';
+import 'package:timer/screens/popup/timer.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:timer/widgets/buttons.dart';
 
 class TimerList extends StatelessWidget {
   TimerList({Key key, this.category}) : super(key: key);
 
   final Category category;
-
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class TimerList extends StatelessWidget {
       appBar: AppBar(
         title: Text(category.name),
         centerTitle: true,
-        backgroundColor: Colors.orange[400],
+        backgroundColor: textColor,
       ),
       body: Container(
         child: Column(
@@ -47,9 +48,11 @@ class TimerList extends StatelessWidget {
             Expanded(
               flex: 1,
               child: ValueListenableBuilder(
-                  valueListenable: Hive.box<Timer>('box_for_timer').listenable(),
+                  valueListenable: Hive.box<Timer>(boxT).listenable(),
                   builder: (context, Box<Timer> box, _) {
-                    final items = box.values.where((item) => item.categoryId == category.key).toList();
+                    final items = box.values
+                        .where((item) => item.categoryId == category.key)
+                        .toList();
 
                     if (items.isEmpty)
                       return Center(
@@ -69,7 +72,8 @@ class TimerList extends StatelessWidget {
                                   subtitle: Row(
                                     children: [
                                       Padding(
-                                        padding: const EdgeInsets.only(right: 5.0),
+                                        padding:
+                                            const EdgeInsets.only(right: 5.0),
                                         child: Icon(
                                           Icons.access_time_rounded,
                                           size: 20.0,
@@ -113,24 +117,18 @@ class TimerList extends StatelessWidget {
                                       print("Удалить");
                                       showDialog(
                                         context: context,
-                                        builder: (BuildContext context) => AlertDialog(
-                                          title: Text("Удалить ${items[index].name}?"),
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                          title: Text(
+                                              "Удалить ${items[index].name}?"),
                                           actions: <Widget>[
-                                            FlatButton(
-                                                color: Colors.orange[400],
-                                                textColor: Colors.white,
-                                                child: Text("Нет"),
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                }),
-                                            FlatButton(
-                                                color: Colors.orange[400],
-                                                textColor: Colors.white,
-                                                child: Text("Да"),
-                                                onPressed: () {
-                                                  items[index].delete();
-                                                  Navigator.pop(context);
-                                                }),
+                                            customFlB("Нет", () {
+                                              Navigator.pop(context);
+                                            }),
+                                            customFlB("Да", () {
+                                              box.getAt(index).delete();
+                                              Navigator.pop(context);
+                                            })
                                           ],
                                         ),
                                       );
@@ -148,11 +146,13 @@ class TimerList extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        backgroundColor: Colors.orange[400],
+        backgroundColor: textColor,
         onPressed: () {
           showDialog(
             context: context,
-            builder: (BuildContext context) => PopupTimer(category: category,),
+            builder: (BuildContext context) => PopupTimer(
+              category: category,
+            ),
           );
         },
       ),
