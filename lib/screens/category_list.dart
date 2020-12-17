@@ -61,7 +61,16 @@ class _CategoryListState extends State<CategoryList> {
                             children: [
                               IconButton(
                                 icon: Icon(Icons.edit),
-                                onPressed: () {},
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        CategoryPopup(
+                                      category: box.getAt(index),
+                                      index: index,
+                                    ),
+                                  );
+                                },
                               ),
                               IconButton(
                                 icon: Icon(Icons.cancel_outlined),

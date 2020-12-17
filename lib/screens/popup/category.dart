@@ -5,6 +5,11 @@ import 'package:timer/models/category.dart';
 import 'package:timer/widgets/buttons.dart';
 
 class CategoryPopup extends StatefulWidget {
+  CategoryPopup({Key key, this.category, this.index}) : super(key: key);
+
+  final Category category;
+  final int index;
+
   @override
   _CategoryPopupState createState() => _CategoryPopupState();
 }
@@ -13,10 +18,14 @@ class _CategoryPopupState extends State<CategoryPopup> {
   String name;
   final _formKey = GlobalKey<FormState>();
 
+  bool isCategory() {
+    return (widget.category != null) ? true : false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Новая категория"),
+      title: Text(isCategory() ? "Редактировать" : "Новая категория"),
       content: Container(
         child: Wrap(
           children: [
@@ -24,7 +33,7 @@ class _CategoryPopupState extends State<CategoryPopup> {
               key: _formKey,
               child: TextFormField(
                 autofocus: true,
-                initialValue: '',
+                initialValue: isCategory() ? widget.category.name : "",
                 decoration: const InputDecoration(
                   labelText: 'Название категории',
                 ),
@@ -55,7 +64,7 @@ class _CategoryPopupState extends State<CategoryPopup> {
   void _validateAndSave() {
     final form = _formKey.currentState;
     if (form.validate()) {
-      _onFormSubmit();
+      isCategory() ? _onFormEdit() : _onFormSubmit();
     } else {
       print('form is invalid');
     }
@@ -66,4 +75,11 @@ class _CategoryPopupState extends State<CategoryPopup> {
     contactsBox.add(Category(name: name));
     Navigator.of(context).pop();
   }
+
+  void _onFormEdit() {
+    Box<Category> contactsBox = Hive.box<Category>(boxC);
+    contactsBox.putAt(widget.index, Category(name: name));
+    Navigator.of(context).pop();
+  }
+
 }
