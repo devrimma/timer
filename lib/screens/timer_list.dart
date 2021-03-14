@@ -106,7 +106,15 @@ class TimerList extends StatelessWidget {
                                 child: IconButton(
                                     icon: Icon(Icons.edit),
                                     onPressed: () {
-                                      print("Редактировать");
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            PopupTimer(
+                                              category: category,
+                                              timer: items[index],
+                                              index: index,
+                                            ),
+                                      );
                                     }),
                               ),
                               Expanded(

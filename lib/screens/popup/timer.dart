@@ -7,9 +7,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:timer/widgets/buttons.dart';
 
 class PopupTimer extends StatefulWidget {
-  PopupTimer({Key key, this.category}) : super(key: key);
+  PopupTimer({Key key, this.category, this.timer, this.index}) : super(key: key);
 
   final Category category;
+  final Timer timer;
+  final int index;
 
   @override
   _PopupTimerState createState() => _PopupTimerState();
@@ -20,10 +22,14 @@ class _PopupTimerState extends State<PopupTimer> {
   int time;
   final _formKey = GlobalKey<FormState>();
 
+  bool isTimer() {
+    return (widget.timer != null) ? true : false;
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Таймер"),
+      title: Text(this.isTimer() ? "Редактировать таймер" : "Создать таймер"),
       content: Container(
         child: Form(
           key: _formKey,
@@ -31,7 +37,7 @@ class _PopupTimerState extends State<PopupTimer> {
             children: [
               TextFormField(
                 autofocus: true,
-                initialValue: '',
+                initialValue: this.isTimer() ? widget.timer.name : "",
                 decoration: InputDecoration(
                   labelText: "Название таймера",
                 ),
@@ -79,7 +85,7 @@ class _PopupTimerState extends State<PopupTimer> {
   void _validateAndSave() {
     final form = _formKey.currentState;
     if (form.validate()) {
-      _onFormSubmit();
+      this.isTimer() ? _onFormEdit() : _onFormSubmit();
     } else {
       print('form is invalid');
     }
@@ -91,4 +97,11 @@ class _PopupTimerState extends State<PopupTimer> {
         .add(Timer(categoryId: widget.category.key, name: name, time: time));
     Navigator.of(context).pop();
   }
+
+  void _onFormEdit() {
+    Box<Timer> contactsBox = Hive.box<Timer>('box_for_timer');
+    contactsBox.putAt(widget.index, Timer(categoryId: widget.timer.categoryId, name: name));
+    Navigator.of(context).pop();
+  }
+
 }
